@@ -25,7 +25,7 @@ class PantLeg
 
 end
 
-#goal: riding.roll_up? must be true, otherwise fail
+
 if __FILE__ == $0
   require 'minitest/autorun'
 
