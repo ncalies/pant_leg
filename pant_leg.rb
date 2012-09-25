@@ -3,10 +3,12 @@ class PantLeg
  	def initialize(wind_dir, travel_dir, temp)
  		@wind_direction = wind_dir.upcase
  		@travel_direction = travel_dir.upcase
- 		@temperature = temp
+ 		@temperature = temp.to_i
  	end
 
   def roll_up?
+    return false if @temperature <= 50
+
     (traveling?("N") && blowing?("W")) || \
     (traveling?("E") && blowing?("N")) || \
     (traveling?("S") && blowing?("E")) || \
@@ -23,37 +25,53 @@ class PantLeg
 
 end
 
-#using the puts below to test until I learn how to write a test
 #goal: riding.roll_up? must be true, otherwise fail
 if __FILE__ == $0
   require 'minitest/autorun'
 
   describe PantLeg do
     describe "#roll_up?" do
-    
-      describe "when initialized w/good values" do
-        let(:pantleg) { PantLeg.new "W", "N", 65 }
+      
+      describe "when temperature above 50" do
+        let(:temperature) { 51 }
+        describe "when initialized w/good values" do
+          
+          it "returns true" do
+            pant_leg = PantLeg.new "W", "N", temperature
+            pant_leg.roll_up?.must_equal true
+          end
+        end
 
-        it "returns true" do
-          pantleg.roll_up?.must_equal true
+        describe "when initialized w/bad values" do
+          
+          it "returns false" do
+            pant_leg = PantLeg.new "N", "N", temperature
+            pant_leg.roll_up?.must_equal false
+          end
         end
       end
 
-      describe "when initialized w/bad values" do
-        let(:pantleg) { PantLeg.new "N", "N", 30 }
+      describe "when temperature is 50" do
+        describe "when initialized w/bad values" do
 
-        it "returns false" do
-          pantleg.roll_up?.must_equal false
+          it "returns false" do
+            pant_leg = PantLeg.new "N", "N", 50
+            pant_leg.roll_up?.must_equal false
+          end
+        end
+      end
+
+      describe "when temperature is less than 50" do
+        describe "when initialized w/bad values" do
+
+          it "returns false" do
+            pant_leg = PantLeg.new "N", "N", 49
+            pant_leg.roll_up?.must_equal false
+          end
         end
       end
 
     end
   end
 
-  # riding = PantLeg.new "W", "N", 65
-  # puts "Should I roll up my pant leg? #{riding.roll_up?}"
-  # riding = PantLeg.new "N", "N", 65
-  # puts "Should I roll up my pant leg? #{riding.roll_up?}"
-  # riding = PantLeg.new "E", "N", 49
-  # puts "Should I roll up my pant leg? #{riding.roll_up?}"
 end
