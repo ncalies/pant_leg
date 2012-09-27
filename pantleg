@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+require_relative "pant_leg"
+
+if ARGV[0] == "-h" || ARGV.empty?
+  puts %{
+    Usage: pantleg wind_direction travel_direction temperature
+
+    wind_direction: N, E, S, W
+    travel_direction: N, E, S, W
+    temperature: 65
+
+    example: pantleg N S 70
+    }
+  exit
+end
+
+pant_leg = PantLeg.new(ARGV[0], ARGV[1], ARGV[2])
+
+puts pant_leg.roll_up?
+
+
